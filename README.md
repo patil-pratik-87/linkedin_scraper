@@ -115,12 +115,32 @@ password = "password123"
 actions.login(driver, email, password) # if email and password isnt given, it'll prompt in terminal
 input("Press Enter")
 job_search = JobSearch(driver=driver, close_on_complete=False, scrape=False)
-# job_search contains jobs from your logged in front page:
+
+# Basic job search
+job_listings = job_search.search("Machine Learning Engineer")
+
+# Enhanced job search with location filtering and company URLs
+job_listings = job_search.search(
+    search_term="Software Engineer",
+    location="San Francisco, CA",      # Filter by location
+    max_results=50,                    # Limit number of results
+    include_description=True,          # Get detailed job descriptions
+    include_company_urls=True          # Extract company LinkedIn URLs
+)
+
+# Access job details including company URLs
+for job in job_listings:
+    print(f"Job: {job.job_title}")
+    print(f"Company: {job.company}")
+    print(f"Company URL: {job.company_linkedin_url}")  # NEW: Company LinkedIn URL
+    print(f"Location: {job.location}")
+    print(f"Description: {job.job_description[:100]}...")  # NEW: Job description
+    print("---")
+
+# job_search also contains jobs from your logged in front page:
 # - job_search.recommended_jobs
 # - job_search.still_hiring
 # - job_search.more_jobs
-
-job_listings = job_search.search("Machine Learning Engineer") # returns the list of `Job` from the first page
 ```
 
 ### Scraping sites where login is required first
